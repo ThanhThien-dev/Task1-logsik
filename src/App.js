@@ -1,47 +1,62 @@
-import { useEffect, useState } from "react";
+import React from "react";
 
 import Title from "./components/Title";
 import Search from "./components/Search";
 import Table from "./components/Table";
+import Modal from "./components/Modal";
 
-function App() {
-  const [users, setUsers] = useState([]);
-
-  async function getUsers() {
-    const res = await fetch("https://dummyjson.com/users");
-    const data = await res.json();
-    return data;
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      showModal: false, // Trạng thái modal
+    };
   }
 
-  useEffect(() => {
-    getUsers()
-      .then((data) => setUsers(data.users))
-      .catch((err) => console.err);
-    // getUsers()
-    //   .then((data) =>
-    //     setUsers([
-    //       { email: "abc@gmail.com", phone: "123", gender: "male" },
-    //       { email: "abc1@gmail.com", phone: "1231", gender: "female" },
-    //     ])
-    //   )
-    //   .catch((err) => console.err);
-  }, []);
+  openModal = () => {
+    this.setState({ showModal: true });
+  };
 
-  return (
-    <div class="content-wrap">
-      <div class="content">
-        {/* <!-- Title --> */}
-        <Title />
-        {/* <!-- Navbar-Search --> */}
-        <Search />
+  closeModal = () => {
+    this.setState({ showModal: false });
+  };
 
-        {/* <!-- Table --> */}
-        <div class="panel">
-          <Table users={users} />
+  componentDidMount() {
+    this.getUsers()
+      .then((data) => this.setState({ users: data.users }))
+      .catch((err) => console.error(err));
+  }
+
+  getUsers() {
+    return fetch("https://dummyjson.com/users")
+      .then((res) => res.json())
+      .then((data) => data)
+      .catch((err) => console.error(err));
+  }
+
+  render() {
+    const { users } = this.state;
+
+    return (
+      <div className="content-wrap">
+        <div className="content">
+          {/* Title */}
+          <Title openModal={this.openModal} />
+          {/* Navbar-Search */}
+          <Search />
+
+          {/* Table */}
+          <div className="panel">
+            <Table users={users} />
+          </div>
+
+          {/* Modal */}
+          {this.state.showModal && <Modal />}
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default App;
