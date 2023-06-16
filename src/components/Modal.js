@@ -16,8 +16,7 @@ class Modal extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the form data
-    // For example, you can send the data to the server or update the state
+    // Do something with the form data (can send the data to the server or update the state)
     const { name, address, phoneNumber } = this.state;
     console.log("Name:", name);
     console.log("Address:", address);

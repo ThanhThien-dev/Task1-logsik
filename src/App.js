@@ -52,7 +52,7 @@ class App extends React.Component {
           </div>
 
           {/* Modal */}
-          {this.state.showModal && <Modal />}
+          {this.state.showModal && <Modal closeModal={this.closeModal} />}
         </div>
       </div>
     );

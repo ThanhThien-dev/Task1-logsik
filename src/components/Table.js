@@ -1,11 +1,26 @@
 import React, { Component } from "react";
 import Loading from "./Loading";
+import OptionsTable from "./OptionsTable";
 import { ImMenu3 } from "react-icons/im";
 import { MdOutlineKeyboardDoubleArrowDown } from "react-icons/md";
 
 class Table extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOptions: false, // Trạng thái của bảng lựa chọn
+    };
+  }
+
+  handleToggleOptions = () => {
+    this.setState((prevState) => ({
+      showOptions: !prevState.showOptions,
+    }));
+  };
+
   render() {
     const { users } = this.props;
+    const { showOptions } = this.state;
 
     return users.length === 0 ? (
       <Loading />
@@ -39,12 +54,16 @@ class Table extends Component {
                 <td>{user.bank.cardNumber}</td>
                 <td>{user.macAddress}</td>
                 <td>
-                  <ImMenu3 />
+                  <ImMenu3
+                    className="optionBtn"
+                    onClick={this.handleToggleOptions}
+                  />
                 </td>
               </tr>
             );
           })}
         </tbody>
+        {showOptions && <OptionsTable />}
       </table>
     );
   }
